@@ -1,1 +1,1 @@
-# bulk-whois
+# Bulk WHOIS calls from a domain names list

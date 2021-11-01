@@ -1,0 +1,20 @@
+--- # bulk whois script configuration
+# input text file with domain names list
+input: input.txt
+# output CSV file with domain names and expiration dates
+output: output.csv
+# create log file
+# logging: true
+logging: false
+# be interactive
+# interactive: true
+interactive: false
+# be verbose
+# verbose: true
+verbose: false
+# delay (in milliseconds) between whois calls
+delay:
+  # minimum delay
+  min: 1000
+  # maximum delay
+  max: 5000
