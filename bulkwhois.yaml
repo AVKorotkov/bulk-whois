@@ -2,7 +2,7 @@
 # input text file with domain names list
 input: input.txt
 # output CSV file with domain names and expiration dates
-output: /tmp/test/output.csv
+output: /tmp/output.csv
 # delay (in milliseconds) between whois calls
 delay:
   # minimum delay
