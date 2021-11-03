@@ -30,8 +30,15 @@ def get_config():
     desc = 'Get expiration dates for a list of domain names'
     parser = argparse.ArgumentParser(description=desc)
     parser.add_argument(
-        '--input', type=str, help='input file for list of domain names')
-    parser.add_argument('--output', type=str, help='output CSV file')
+        '--input',
+        type=str,
+        help='input file for list of domain names'
+    )
+    parser.add_argument(
+        '--output',
+        type=str,
+        help='output CSV file'
+    )
     parser.add_argument(
         '--dmin',
         type=int,
