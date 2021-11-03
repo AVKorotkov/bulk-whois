@@ -78,7 +78,7 @@ def main():
                         else:
                             exp = 'error'
                     except ConnectionError as err:
-                        print(f'WHOIS error {err}')
+                        print(f'WHOIS error: {err}')
                         exp = 'error'
 
                     writer.writerow([domain, exp])
