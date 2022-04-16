@@ -8,8 +8,10 @@ domain name and expiration date columns.
 ## Requirements
 
 * Python 3.4+
-* [python-whois](https://pypi.org/project/python-whois/)
-* [ConfigObj](https://pypi.org/project/configobj/)
+* [python-whois](<https://pypi.org/project/python-whois/>)
+* [ConfigObj](<https://pypi.org/project/configobj/>)
+
+> It is required to install ConfigObj from https://github.com/DiffSK/configobj
 
 ## Installation
 
