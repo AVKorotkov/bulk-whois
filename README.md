@@ -7,9 +7,9 @@ domain name and expiration date columns.
 
 ## Requirements
 
-* Python 3.x
+* Python 3.4+
 * [python-whois](https://pypi.org/project/python-whois/)
-* [Confuse](https://pypi.org/project/confuse/)
+* [ConfigObj](https://pypi.org/project/configobj/)
 
 ## Installation
 
