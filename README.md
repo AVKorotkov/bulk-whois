@@ -29,6 +29,25 @@ files accordingly. Keep these three files in the same directory.
 The script does delays between WHOIS calls for avoiding to be blocked.
 Every delay is calculated as a random value between `dmin` and `dmax`.
 
+Key/values in a configuration file could be overridden by command line
+options:
+
+```text
+usage: bulkwhois.py [-h] [-i INFILE] [-o OUTFILE] [--dmin DELAY_MIN] [--dmax DELAY_MAX]
+
+Get expiration dates for a list of domain names
+
+options:
+  -h, --help            show this help message and exit
+  -i INFILE, --infile INFILE
+                        input file for the given list of domain names
+  -o OUTFILE, --outfile OUTFILE
+                        output CSV file
+  --dmin DELAY_MIN      min delay (in ms) between whois calls
+  --dmax DELAY_MAX      max delay (in ms) between whois calls
+
+```
+
 ## TODO
 
 * Add logging.

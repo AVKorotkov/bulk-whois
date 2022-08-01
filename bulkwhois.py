@@ -3,10 +3,11 @@
 
 """Bulk WHOIS calls from a domain names list."""
 
+import argparse
+import datetime
 import csv
 import sys
 import time
-import datetime
 from random import randint
 from pathlib import Path
 import whois
@@ -31,39 +32,6 @@ def get_config() -> ConfigObj:
     return conf
 
 
-def check_min_and_max(delay_min: int, delay_max: int) -> None:
-    """Check maximum and minimum delays.
-
-    :param delay_min: Minimum delay, in milliseconds
-    :type delay_min: int
-    :param delay_max: Maximum delay, in milliseconds
-    :type delay_max: int
-    :raises ValueError: Exit if minimum delay is greater than maximum delay
-    """
-    try:
-        if delay_min > delay_max:
-            msg = (f'Minimum delay ({delay_min}) must not be greater '
-                   f'than maximum delay ({delay_max}).'
-                   )
-            raise ValueError(msg)
-    except ValueError as err:
-        print(err)
-        sys.exit('Check these values in your configuration file. Exiting now.')
-
-
-def random_sleep(delay_min: int, delay_max: int) -> None:
-    """Sleep for a random time (in seconds) in the given range.
-
-    :param delay_min: Minimum delay, in milliseconds
-    :type delay_min: int
-    :param delay_max: Maximum delay, in milliseconds
-    :type delay_max: int
-    """
-    # random delay in range (in seconds)
-    delay = randint(delay_min, delay_max) / 1000
-    time.sleep(delay)
-
-
 def validate_config(conf: ConfigObj) -> None:
     """Validate configuration file.
 
@@ -84,17 +52,108 @@ def validate_config(conf: ConfigObj) -> None:
         sys.exit(2)
 
 
-def main():
-    """Process all domain names from the given list."""
+def check_min_and_max(delay_min: int, delay_max: int) -> None:
+    """Check maximum and minimum delays.
+
+    :param delay_min: Minimum delay, in milliseconds
+    :type delay_min: int
+    :param delay_max: Maximum delay, in milliseconds
+    :type delay_max: int
+    :raises ValueError: Exit if minimum delay is greater than maximum delay
+    """
+    try:
+        if delay_min > delay_max:
+            msg = (f'Minimum delay ({delay_min}) must not be greater '
+                   f'than maximum delay ({delay_max}).'
+                   )
+            raise ValueError(msg)
+    except ValueError as err:
+        print(err)
+        sys.exit('Check these values in your configuration file. Exiting now.')
+
+
+def get_args() -> argparse.Namespace:
+    """Parse command line arguments.
+
+    :raises ArgumentError: wrong argument(s).
+    :return: command line arguments
+    :rtype: argparse.Namespace
+    """
+    desc = 'Get expiration dates for a list of domain names'
+    parser = argparse.ArgumentParser(description=desc)
+    parser.add_argument(
+        '-i',
+        '--infile',
+        type=str,
+        help='input file for the given list of domain names'
+    )
+    parser.add_argument(
+        '-o',
+        '--outfile',
+        type=str,
+        help='output CSV file'
+    )
+    parser.add_argument(
+        '--dmin',
+        type=int,
+        help='min delay (in ms) between whois calls',
+        dest='delay_min'
+    )
+    parser.add_argument(
+        '--dmax',
+        type=int,
+        help='max delay (in ms) between whois calls',
+        dest='delay_max'
+    )
+    args = parser.parse_args()
+    return args
+
+
+def set_config() -> dict:
+    """Set the final configuration by merging the given
+    configuration file and command line arguments
+
+    :return: Configuration options overwritten by command line arguments
+    :rtype: dict
+    """
     config = get_config()
     validate_config(config)
     check_min_and_max(config['delay']['min'], config['delay']['max'])
-    input_file = config['data']['input']
-    input_path = Path(input_file).absolute()
-    output_file = config['data']['output']
-    output_path = Path(output_file).absolute()
-    delay_min = config['delay']['min']
-    delay_max = config['delay']['max']
+    # current configation options from the given configation file
+    cnf = {}
+    cnf['infile'] = config['data']['input']
+    cnf['outfile'] = config['data']['output']
+    cnf['delay_min'] = config['delay']['min']
+    cnf['delay_max'] = config['delay']['max']
+    args = get_args()
+    # overwrite options from the given configation file
+    # by command line arguments
+    for arg in vars(args):
+        if vars(args)[arg] is not None:
+            cnf[arg] = vars(args)[arg]
+
+    return cnf
+
+
+def random_sleep(delay_min: int, delay_max: int) -> None:
+    """Sleep for a random time (in seconds) in the given range.
+
+    :param delay_min: Minimum delay, in milliseconds
+    :type delay_min: int
+    :param delay_max: Maximum delay, in milliseconds
+    :type delay_max: int
+    """
+    # random delay in the given range (in seconds)
+    delay = randint(delay_min, delay_max) / 1000
+    time.sleep(delay)
+
+
+def main():
+    """Process all domain names from the given list."""
+    # set the final options
+    opts = set_config()
+    input_path = Path(opts['infile']).absolute()
+    output_path = Path(opts['outfile']).absolute()
     # read input file, call WHOIS for every domain name and write the result
     with open(output_path, 'w', encoding='utf-8') as ofile:
         writer = csv.writer(ofile)
@@ -119,7 +178,7 @@ def main():
                         exp = 'error'
 
                     writer.writerow([domain, exp])
-                    random_sleep(delay_min, delay_max)
+                    random_sleep(opts['delay_min'], opts['delay_max'])
 
 
 if __name__ == '__main__':
