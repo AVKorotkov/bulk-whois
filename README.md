@@ -1,8 +1,8 @@
 # Bulk WHOIS calls from a domain names list
 
 Bulk WHOIS is a Python script to call WHOIS from a domain names list
-(like [this sample](input.txt)). It reads a YAML configuration file,
-calls WHOIS for every domain name in a list and writes a CSV file with
+(like [this sample](input.txt)). It reads a configuration file, calls
+WHOIS for every domain name in a list and writes a CSV file with
 domain name and expiration date columns.
 
 ## Requirements
@@ -26,8 +26,8 @@ these [configuration](bulkwhois.conf) and [spec](bulkwhoisspec.conf) samples.
 If you rename `bulkwhois.py` then you need to rename configuration and spec
 files accordingly. Keep these three files in the same directory.
 
-Key/values in a configuration file could be overridden by command line
-options:
+Key/values in a configuration file could be overwritten by command line
+arguments:
 
 ```text
 usage: bulkwhois.py [-h] [-i INFILE] [-o OUTFILE] [--dmin DELAY_MIN] [--dmax DELAY_MAX]
