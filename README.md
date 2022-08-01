@@ -26,9 +26,6 @@ these [configuration](bulkwhois.conf) and [spec](bulkwhoisspec.conf) samples.
 If you rename `bulkwhois.py` then you need to rename configuration and spec
 files accordingly. Keep these three files in the same directory.
 
-The script does delays between WHOIS calls for avoiding to be blocked.
-Every delay is calculated as a random value between `dmin` and `dmax`.
-
 Key/values in a configuration file could be overridden by command line
 options:
 
@@ -47,6 +44,9 @@ options:
   --dmax DELAY_MAX      max delay (in ms) between whois calls
 
 ```
+
+The script does delays between WHOIS calls for avoiding to be blocked.
+Every delay is calculated as a random value between `dmin` and `dmax`.
 
 ## TODO
 
