@@ -2,8 +2,8 @@
 
 Bulk WHOIS is a Python script to call WHOIS from a domain names list
 (like [this sample](input.txt)). It reads a configuration file, calls
-WHOIS for every domain name in a list and writes a CSV file with
-domain name and expiration date columns.
+WHOIS for every domain name in a list and writes
+a [CSV file](output.csv) with domain name and expiration date columns.
 
 ## Requirements
 
